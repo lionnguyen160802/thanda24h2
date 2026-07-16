@@ -154,28 +154,27 @@ const App = (() => {
           <span></span><span></span><span></span>
         </button>
       </div>
-
-      <nav class="nav-mobile" id="nav-mobile">
-        ${nav.map(item => {
-          if (item.children) {
-            return `
-            <div class="nav-item">
-              <a href="#san-pham" class="nav-link">${item.label}</a>
-              <div class="nav-dropdown">
-                ${item.children.map(child => `
-                  <a href="#san-pham/${child.id}">${child.label}</a>
-                `).join('')}
-              </div>
-            </div>`;
-          }
-          return `<a href="#${item.id}" class="nav-link">${item.label}</a>`;
-        }).join('')}
-        <a href="tel:${data.siteInfo.hotline}" class="header-hotline mobile-hotline" style="margin-top:24px;">
-          <i class="fas fa-phone-alt"></i>
-          ${data.siteInfo.hotline} (${data.siteInfo.contactPerson})
-        </a>
-      </nav>
-    </header>`;
+    </header>
+    <nav class="nav-mobile" id="nav-mobile">
+      ${nav.map(item => {
+        if (item.children) {
+          return `
+          <div class="nav-item">
+            <a href="#san-pham" class="nav-link">${item.label}</a>
+            <div class="nav-dropdown">
+              ${item.children.map(child => `
+                <a href="#san-pham/${child.id}">${child.label}</a>
+              `).join('')}
+            </div>
+          </div>`;
+        }
+        return `<a href="#${item.id}" class="nav-link">${item.label}</a>`;
+      }).join('')}
+      <a href="tel:${data.siteInfo.hotline}" class="header-hotline mobile-hotline" style="margin-top:24px;">
+        <i class="fas fa-phone-alt"></i>
+        ${data.siteInfo.hotline} (${data.siteInfo.contactPerson})
+      </a>
+    </nav>`;
   }
 
   // ============================================

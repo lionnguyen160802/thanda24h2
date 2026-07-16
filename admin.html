@@ -45,8 +45,13 @@
   <main class="admin-main">
     <!-- Topbar -->
     <div class="admin-topbar">
-      <div class="topbar-title" id="topbar-title">
-        <i class="fas fa-th-large"></i> Dashboard
+      <div style="display: flex; align-items: center;">
+        <button class="admin-menu-toggle" id="admin-menu-toggle" aria-label="Toggle Sidebar" style="background: none; border: none; color: var(--text-primary); font-size: 1.25rem; margin-right: 12px; cursor: pointer; display: none;">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="topbar-title" id="topbar-title">
+          <i class="fas fa-th-large"></i> Dashboard
+        </div>
       </div>
       <div class="topbar-actions">
         <button class="btn btn-primary" id="btn-push-github" onclick="Admin.pushToGitHub()" style="display:none;">

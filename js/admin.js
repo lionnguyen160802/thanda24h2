@@ -229,6 +229,23 @@ const Admin = (() => {
   }
 
   function setupSidebarEvents() {
+    const menuToggle = document.getElementById('admin-menu-toggle');
+    const sidebar = document.getElementById('admin-sidebar');
+    
+    if (menuToggle && sidebar) {
+      menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.toggle('open');
+      });
+      
+      // Close when clicking outside
+      document.addEventListener('click', (e) => {
+        if (sidebar.classList.contains('open') && !sidebar.contains(e.target) && e.target !== menuToggle) {
+          sidebar.classList.remove('open');
+        }
+      });
+    }
+
     document.getElementById('admin-sidebar-nav').addEventListener('click', (e) => {
       const link = e.target.closest('.sidebar-link');
       if (!link) return;
@@ -239,6 +256,10 @@ const Admin = (() => {
 
       currentSection = link.dataset.section;
       renderContent();
+      
+      if (sidebar) {
+        sidebar.classList.remove('open');
+      }
     });
   }
 

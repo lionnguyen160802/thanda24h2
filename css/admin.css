@@ -644,6 +644,9 @@ ul { list-style: none; }
 }
 
 @media (max-width: 768px) {
+  .admin-menu-toggle {
+    display: block !important;
+  }
   .admin-sidebar {
     transform: translateX(-100%);
   }
