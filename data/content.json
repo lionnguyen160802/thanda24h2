@@ -1,0 +1,440 @@
+{
+  "siteInfo": {
+    "companyName": "Công ty TNHH Than Đá Thái Bình",
+    "shortName": "Than Đá Thái Bình",
+    "slogan": "Đốt sáng niềm tin, thắp lửa thành công!",
+    "description": "Than Đá Thái Bình tự hào là đối tác cung cấp hàng đầu của rất nhiều khách hàng là nhà máy sản xuất và cả những doanh nghiệp kinh doanh than đá khu vực phía Nam",
+    "hotline": "0932 087 568",
+    "contactPerson": "Mr. Sơn",
+    "email": "congtythannamson@gmail.com",
+    "website": "www.thanda.vn",
+    "address": {
+      "office": "Số 39, Đường 46-CL, KP 3, P. Cát Lái, TP. Thủ Đức, TP. HCM",
+      "warehouse": "Đường Bùi Hữu Nghĩa, Phường Biên Hòa, Đồng Nai (Đối diện cầu Bửu Hoà)"
+    },
+    "facebook": "https://www.facebook.com/namtiendat"
+  },
+  "navigation": [
+    { "id": "trang-chu", "label": "Trang chủ", "icon": "fa-home" },
+    { "id": "gioi-thieu", "label": "Giới thiệu", "icon": "fa-building" },
+    {
+      "id": "san-pham",
+      "label": "Sản phẩm",
+      "icon": "fa-cubes",
+      "children": [
+        { "id": "than-da-cuc", "label": "Than đá cục" },
+        { "id": "than-da-cam", "label": "Than đá cám" },
+        { "id": "than-da-indonesia", "label": "Than đá Indonesia" },
+        { "id": "than-da-uc", "label": "Than đá Úc" },
+        { "id": "than-da-nam-phi", "label": "Than đá Nam Phi" }
+      ]
+    },
+    { "id": "dich-vu", "label": "Dịch vụ", "icon": "fa-cogs" },
+    { "id": "tin-tuc", "label": "Tin tức", "icon": "fa-newspaper" },
+    { "id": "lien-he", "label": "Liên hệ", "icon": "fa-envelope" }
+  ],
+  "heroSection": {
+    "title": "NHÀ CUNG CẤP THAN CHUYÊN NGHIỆP HÀNG ĐẦU TẠI VIỆT NAM",
+    "subtitle": "Công ty TNHH Than Đá Thái Bình",
+    "description": "Công ty TNHH Than Đá Thái Bình được thành lập tại TP.HCM với mục tiêu là cung cấp than đá Quảng Ninh và than nhập khẩu tới các khách hàng ở khu vực phía Nam như TP.HCM, Đồng Nai, Bình Dương, Tây Ninh, Bình Thuận, Vũng Tàu, Cần Thơ, An Giang, Long An…",
+    "backgroundImage": "images/hero-banner.jpg"
+  },
+  "aboutContent": {
+    "intro": "Công ty TNHH Than Đá Thái Bình được thành lập với mục tiêu là cung cấp than đá Quảng Ninh và than nhập khẩu tới các khách hàng ở khu vực phía Nam như TP.HCM, Đồng Nai, Bình Dương, Tây Ninh, Bình Thuận, Vũng Tàu, Cần Thơ, An Giang, Long An…",
+    "experience": "Với truyền thống, bề dày kinh nghiệm trong lĩnh vực than đá và phương châm kinh doanh \"Uy tín là số một\", tới nay công ty chúng tôi tự hào đã là đối tác cung cấp hàng đầu của rất nhiều khách hàng là các nhà máy sản xuất và cả những doanh nghiệp kinh doanh than đá ở khu vực phía Nam.",
+    "products": "Sản phẩm than đá của chúng tôi cung cấp chuyên phục vụ đốt lò hơi công nghiệp cho các nhà máy như dệt nhuộm, sản xuất giấy, xi măng, bê tông, sắt thép, thức ăn gia súc… và rất nhiều các ngành công nghiệp khác.",
+    "cta": "Quý khách hàng có nhu cầu vui lòng tham khảo và liên hệ a Sơn – trưởng phòng kinh doanh để được tư vấn cụ thể theo nhu cầu của quý khách hàng.",
+    "closing": "Chân thành cảm ơn quý khách hàng đã quan tâm!",
+    "highlights": [
+      { "icon": "fa-truck", "title": "Giao hàng tận nơi", "description": "Giao hàng nhanh chóng đến tận kho của khách hàng trên toàn miền Nam" },
+      { "icon": "fa-certificate", "title": "Chất lượng đảm bảo", "description": "Than đá đạt tiêu chuẩn chất lượng, đảm bảo nhiệt trị cao" },
+      { "icon": "fa-handshake", "title": "Uy tín hàng đầu", "description": "Đối tác tin cậy của hàng trăm nhà máy và doanh nghiệp" },
+      { "icon": "fa-tags", "title": "Giá cạnh tranh", "description": "Cam kết mức giá tốt nhất thị trường, chiết khấu hấp dẫn" }
+    ]
+  },
+  "productCategories": [
+    {
+      "id": "than-da-cuc",
+      "name": "Than đá cục",
+      "description": "Than đá cục Quảng Ninh chất lượng cao, nhiệt trị lớn",
+      "image": "images/products/than-da-cuc.jpg",
+      "products": [
+        {
+          "id": "than-da-cuc-vn-30-250mm",
+          "name": "Than đá cục Việt Nam kích cỡ 30-250mm Quảng Ninh",
+          "category": "than-da-cuc",
+          "image": "images/products/than-da-cuc.jpg",
+          "description": "Than đá cục Việt Nam kích cỡ 30-250mm, xuất xứ Quảng Ninh, nhiệt trị cao, phù hợp cho các lò hơi công nghiệp.",
+          "specs": { "kichCo": "30-250mm", "xuatXu": "Quảng Ninh, Việt Nam", "nhietTri": "Cao" }
+        },
+        {
+          "id": "than-cuc-xo-1a",
+          "name": "Than cục xô 1a Quảng Ninh",
+          "category": "than-da-cuc",
+          "image": "images/products/than-da-cuc.jpg",
+          "description": "Than cục xô 1a Quảng Ninh, chất lượng hàng đầu, phù hợp cho nhiều ứng dụng công nghiệp.",
+          "specs": { "loai": "Cục xô 1a", "xuatXu": "Quảng Ninh, Việt Nam", "nhietTri": "Cao" }
+        },
+        {
+          "id": "than-cuc-mo-ha-lam-container",
+          "name": "Than cục mỏ Hà Lầm đóng container",
+          "category": "than-da-cuc",
+          "image": "images/products/than-da-cuc.jpg",
+          "description": "Than cục từ mỏ Hà Lầm, đóng container tiện lợi vận chuyển đường dài.",
+          "specs": { "loai": "Cục mỏ Hà Lầm", "dongGoi": "Container", "xuatXu": "Quảng Ninh" }
+        },
+        {
+          "id": "than-cuc-chon-loai-1",
+          "name": "Than cục chọn loại 1",
+          "category": "than-da-cuc",
+          "image": "images/products/than-da-cuc.jpg",
+          "description": "Than cục chọn loại 1, chất lượng tốt nhất, ít tạp chất.",
+          "specs": { "loai": "Chọn loại 1", "xuatXu": "Quảng Ninh", "nhietTri": "Rất cao" }
+        },
+        {
+          "id": "than-cuc-3",
+          "name": "Than cục 3",
+          "category": "than-da-cuc",
+          "image": "images/products/than-da-cuc.jpg",
+          "description": "Than cục 3, phù hợp cho đốt lò hơi công nghiệp quy mô vừa.",
+          "specs": { "loai": "Cục 3", "xuatXu": "Quảng Ninh" }
+        },
+        {
+          "id": "than-cuc-4",
+          "name": "Than cục 4",
+          "category": "than-da-cuc",
+          "image": "images/products/than-da-cuc.jpg",
+          "description": "Than cục 4, giá thành hợp lý, nhiệt trị ổn định.",
+          "specs": { "loai": "Cục 4", "xuatXu": "Quảng Ninh" }
+        },
+        {
+          "id": "than-cuc-xo-mo-ha-lam",
+          "name": "Than cục xô mỏ Hà Lầm",
+          "category": "than-da-cuc",
+          "image": "images/products/than-da-cuc.jpg",
+          "description": "Than cục xô từ mỏ Hà Lầm, Quảng Ninh, chất lượng ổn định.",
+          "specs": { "loai": "Cục xô", "xuatXu": "Mỏ Hà Lầm, Quảng Ninh" }
+        }
+      ]
+    },
+    {
+      "id": "than-da-cam",
+      "name": "Than đá cám",
+      "description": "Than đá cám các loại từ Quảng Ninh, phù hợp cho lò hơi công nghiệp",
+      "image": "images/products/than-da-cam.jpg",
+      "products": [
+        {
+          "id": "than-cam-vn-0-15mm",
+          "name": "Than cám Việt Nam kích cỡ 0-15mm",
+          "category": "than-da-cam",
+          "image": "images/products/than-da-cam.jpg",
+          "description": "Than cám Việt Nam kích cỡ 0-15mm, phù hợp cho lò hơi công nghiệp.",
+          "specs": { "kichCo": "0-15mm", "xuatXu": "Việt Nam", "nhietTri": "Trung bình - Cao" }
+        },
+        {
+          "id": "than-cam-7",
+          "name": "Than cám 7 Quảng Ninh",
+          "category": "than-da-cam",
+          "image": "images/products/than-da-cam.jpg",
+          "description": "Than cám 7 Quảng Ninh, loại than phổ biến cho công nghiệp.",
+          "specs": { "loai": "Cám 7", "xuatXu": "Quảng Ninh" }
+        },
+        {
+          "id": "than-cam-cac-loai",
+          "name": "Than cám các loại 3,4,5,6,7",
+          "category": "than-da-cam",
+          "image": "images/products/than-da-cam.jpg",
+          "description": "Than cám đa dạng các loại 3, 4, 5, 6, 7 từ Quảng Ninh.",
+          "specs": { "loai": "Cám 3,4,5,6,7", "xuatXu": "Quảng Ninh" }
+        },
+        {
+          "id": "than-cam-dong-bao",
+          "name": "Than cám đóng bao",
+          "category": "than-da-cam",
+          "image": "images/products/than-da-cam.jpg",
+          "description": "Than cám đóng bao tiện lợi, dễ vận chuyển và bảo quản.",
+          "specs": { "dongGoi": "Bao", "xuatXu": "Quảng Ninh" }
+        },
+        {
+          "id": "than-cam-mieng",
+          "name": "Than cám miếng",
+          "category": "than-da-cam",
+          "image": "images/products/than-da-cam.jpg",
+          "description": "Than cám miếng, kích cỡ lớn hơn than cám thông thường.",
+          "specs": { "loai": "Cám miếng", "xuatXu": "Quảng Ninh" }
+        }
+      ]
+    },
+    {
+      "id": "than-da-indonesia",
+      "name": "Than đá Indonesia",
+      "description": "Than đá Indonesia nhập khẩu chính hãng, đa dạng GAR",
+      "image": "images/products/than-da-indo.jpg",
+      "products": [
+        {
+          "id": "than-cuc-indo-nau-gar3600",
+          "name": "Than cục Indo nâu GAR 3600 30-70mm",
+          "category": "than-da-indonesia",
+          "image": "images/products/than-da-indo.jpg",
+          "description": "Than cục Indonesia màu nâu, GAR 3600, kích cỡ 30-70mm.",
+          "specs": { "gar": "3600", "kichCo": "30-70mm", "mau": "Nâu", "xuatXu": "Indonesia" }
+        },
+        {
+          "id": "than-cuc-indo-den-gar5500",
+          "name": "Than cục Indo đen GAR 5500 10-30mm",
+          "category": "than-da-indonesia",
+          "image": "images/products/than-da-indo.jpg",
+          "description": "Than cục Indonesia màu đen, GAR 5500, nhiệt trị cao, kích cỡ 10-30mm.",
+          "specs": { "gar": "5500", "kichCo": "10-30mm", "mau": "Đen", "xuatXu": "Indonesia" }
+        },
+        {
+          "id": "than-cam-indo-nau-gar3600",
+          "name": "Than cám Indo nâu GAR 3600",
+          "category": "than-da-indonesia",
+          "image": "images/products/than-da-indo.jpg",
+          "description": "Than cám Indonesia nâu, GAR 3600, giá tốt.",
+          "specs": { "gar": "3600", "mau": "Nâu", "xuatXu": "Indonesia" }
+        },
+        {
+          "id": "than-cam-indo-gar4200",
+          "name": "Than cám Indo GAR 4200 0-10mm",
+          "category": "than-da-indonesia",
+          "image": "images/products/than-da-indo.jpg",
+          "description": "Than cám Indonesia GAR 4200, kích cỡ 0-10mm, chất lượng ổn định.",
+          "specs": { "gar": "4200", "kichCo": "0-10mm", "xuatXu": "Indonesia" }
+        },
+        {
+          "id": "than-cam-indo-den-5500",
+          "name": "Than cám Indo đen 5500 0-10mm",
+          "category": "than-da-indonesia",
+          "image": "images/products/than-da-indo.jpg",
+          "description": "Than cám Indonesia đen GAR 5500, kích cỡ 0-10mm, nhiệt trị cao.",
+          "specs": { "gar": "5500", "kichCo": "0-10mm", "mau": "Đen", "xuatXu": "Indonesia" }
+        },
+        {
+          "id": "than-da-cuc-indo-0-30mm",
+          "name": "Than đá cục Indo kích cỡ 0-30mm",
+          "category": "than-da-indonesia",
+          "image": "images/products/than-da-indo.jpg",
+          "description": "Than đá cục Indonesia, kích cỡ 0-30mm, phù hợp nhiều loại lò.",
+          "specs": { "kichCo": "0-30mm", "xuatXu": "Indonesia" }
+        },
+        {
+          "id": "than-cam-indo-den-gar5500-0-30mm",
+          "name": "Than cám Indo đen GAR 5500, kích cỡ 0-30mm",
+          "category": "than-da-indonesia",
+          "image": "images/products/than-da-indo.jpg",
+          "description": "Than cám Indonesia đen GAR 5500, kích cỡ 0-30mm.",
+          "specs": { "gar": "5500", "kichCo": "0-30mm", "mau": "Đen", "xuatXu": "Indonesia" }
+        },
+        {
+          "id": "than-da-cam-indo-gar4200",
+          "name": "Than đá cám Indo GAR 4200",
+          "category": "than-da-indonesia",
+          "image": "images/products/than-da-indo.jpg",
+          "description": "Than đá cám Indonesia GAR 4200, lựa chọn phổ biến cho lò hơi.",
+          "specs": { "gar": "4200", "xuatXu": "Indonesia" }
+        },
+        {
+          "id": "than-cam-indo-nau-gar4200-0-10mm",
+          "name": "Than cám Indo nâu GAR 4200, kích cỡ 0-10mm",
+          "category": "than-da-indonesia",
+          "image": "images/products/than-da-indo.jpg",
+          "description": "Than cám Indonesia nâu GAR 4200, kích cỡ nhỏ 0-10mm.",
+          "specs": { "gar": "4200", "kichCo": "0-10mm", "mau": "Nâu", "xuatXu": "Indonesia" }
+        },
+        {
+          "id": "than-cam-indo-gar3600",
+          "name": "Than cám Indo GAR 3600",
+          "category": "than-da-indonesia",
+          "image": "images/products/than-da-indo.jpg",
+          "description": "Than cám Indonesia GAR 3600, giá cạnh tranh.",
+          "specs": { "gar": "3600", "xuatXu": "Indonesia" }
+        }
+      ]
+    },
+    {
+      "id": "than-da-uc",
+      "name": "Than đá Úc",
+      "description": "Than đá Úc nhập khẩu chất lượng cao, nhiệt trị vượt trội",
+      "image": "images/products/than-da-uc.jpg",
+      "products": [
+        {
+          "id": "than-cuc-uc",
+          "name": "Than cục Úc",
+          "category": "than-da-uc",
+          "image": "images/products/than-da-uc.jpg",
+          "description": "Than cục Úc nhập khẩu, chất lượng cao, nhiệt trị vượt trội, phù hợp cho các nhà máy lớn.",
+          "specs": { "loai": "Cục", "xuatXu": "Australia", "nhietTri": "Rất cao" }
+        },
+        {
+          "id": "than-uc",
+          "name": "Than Úc",
+          "category": "than-da-uc",
+          "image": "images/products/than-da-uc.jpg",
+          "description": "Than đá Úc nhập khẩu chính hãng, đảm bảo chất lượng quốc tế.",
+          "specs": { "xuatXu": "Australia", "nhietTri": "Rất cao" }
+        }
+      ]
+    },
+    {
+      "id": "than-da-nam-phi",
+      "name": "Than đá Nam Phi",
+      "description": "Than đá Nam Phi nhập khẩu, giá cạnh tranh",
+      "image": "images/products/than-da-nam-phi.jpg",
+      "products": [
+        {
+          "id": "than-nam-phi-nhap-khau",
+          "name": "Than Nam Phi nhập khẩu",
+          "category": "than-da-nam-phi",
+          "image": "images/products/than-da-nam-phi.jpg",
+          "description": "Than đá Nam Phi nhập khẩu, chất lượng tốt, giá cạnh tranh.",
+          "specs": { "xuatXu": "Nam Phi", "nhietTri": "Cao" }
+        },
+        {
+          "id": "cung-cap-than-nam-phi",
+          "name": "Cung cấp than Nam Phi",
+          "category": "than-da-nam-phi",
+          "image": "images/products/than-da-nam-phi.jpg",
+          "description": "Cung cấp than đá Nam Phi số lượng lớn, giao hàng tận nơi.",
+          "specs": { "xuatXu": "Nam Phi", "nhietTri": "Cao", "giaoHang": "Tận nơi" }
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "id": "cung-cap-than-indo-gia-tot",
+      "title": "Công Ty Cung Cấp Than Đá Indo Giá Tốt - Giao Hàng Tận Nơi",
+      "summary": "Chuyên cung cấp than đá Indonesia nhập khẩu chính hãng, đa dạng GAR từ 3600 đến 5500, giao hàng tận nơi trên toàn miền Nam.",
+      "content": "Công ty TNHH Than Đá Thái Bình chuyên cung cấp than đá Indonesia nhập khẩu chính hãng với đa dạng chủng loại GAR từ 3600 đến 5500. Chúng tôi cam kết mức giá tốt nhất thị trường, giao hàng tận nơi trên toàn miền Nam. Than Indo của chúng tôi đáp ứng mọi nhu cầu đốt lò hơi công nghiệp cho các nhà máy sản xuất.",
+      "image": "images/news/service-1.jpg"
+    },
+    {
+      "id": "cung-cap-than-quang-ninh",
+      "title": "Cung Cấp Than Quảng Ninh Giá Cạnh Tranh, Giao Nhanh [MIỀN NAM]",
+      "summary": "Cung cấp than đá Quảng Ninh chính gốc với giá cạnh tranh nhất, vận chuyển nhanh chóng đến khu vực miền Nam.",
+      "content": "Than Đá Thái Bình là đơn vị chuyên cung cấp than Quảng Ninh chính gốc với giá cạnh tranh nhất khu vực miền Nam. Chúng tôi có hệ thống kho bãi tại Đồng Nai, đảm bảo giao hàng nhanh chóng cho các nhà máy tại TP.HCM, Bình Dương, Đồng Nai và các tỉnh lân cận.",
+      "image": "images/news/service-2.jpg"
+    },
+    {
+      "id": "cung-cap-than-cho-lo-hoi",
+      "title": "Công Ty Cung Cấp Than Đá Cho Lò Hơi, Nhà Máy [MIỀN NAM]",
+      "summary": "Chuyên cung cấp than đá đốt lò hơi cho các nhà máy sản xuất khu vực miền Nam.",
+      "content": "Với kinh nghiệm nhiều năm trong ngành, Than Đá Thái Bình chuyên cung cấp than đá đốt lò hơi cho các nhà máy sản xuất. Sản phẩm bao gồm than cục, than cám các loại từ Quảng Ninh và than nhập khẩu từ Indonesia, Úc, Nam Phi. Chúng tôi cam kết chất lượng và giao hàng đúng hẹn.",
+      "image": "images/news/service-3.jpg"
+    },
+    {
+      "id": "don-vi-cung-cap-than-uy-tin",
+      "title": "Đơn Vị Cung Cấp Than Đá Đốt Lò Hơi Uy Tín Toàn Miền Nam",
+      "summary": "Đơn vị uy tín chuyên cung cấp than đá đốt lò hơi cho các doanh nghiệp trên toàn miền Nam.",
+      "content": "Than Đá Thái Bình là đơn vị uy tín hàng đầu trong lĩnh vực cung cấp than đá đốt lò hơi. Chúng tôi phục vụ hàng trăm nhà máy và doanh nghiệp trên toàn miền Nam với phương châm 'Uy tín là số một'. Than đá của chúng tôi đạt tiêu chuẩn chất lượng, đảm bảo hiệu suất đốt cháy cao.",
+      "image": "images/news/service-4.jpg"
+    },
+    {
+      "id": "cung-cap-than-indo-nhap-khau",
+      "title": "Cung Cấp Than Indo Nhập Khẩu chính hãng, Giá Tốt",
+      "summary": "Than Indonesia nhập khẩu chính hãng, đảm bảo chất lượng, giá cả cạnh tranh.",
+      "content": "Chúng tôi nhập khẩu trực tiếp than đá Indonesia từ các mỏ uy tín, đảm bảo chất lượng và giá cả cạnh tranh. Sản phẩm đa dạng với các mức GAR phù hợp cho mọi loại lò hơi công nghiệp.",
+      "image": "images/news/service-5.jpg"
+    },
+    {
+      "id": "cung-cap-than-quang-ninh-chat-luong",
+      "title": "Cung Cấp Than Quảng Ninh Chất Lượng Cao, Giá Tốt [MIỀN NAM]",
+      "summary": "Than Quảng Ninh chất lượng cao, nhiệt trị lớn, giao hàng nhanh tại miền Nam.",
+      "content": "Than đá Quảng Ninh từ Than Đá Thái Bình được tuyển chọn kỹ lưỡng, đảm bảo nhiệt trị cao và ít tạp chất. Chúng tôi giao hàng nhanh chóng đến mọi tỉnh thành khu vực phía Nam với mức giá tốt nhất.",
+      "image": "images/news/service-6.jpg"
+    },
+    {
+      "id": "cung-cap-than-da-mien-nam",
+      "title": "Cung Cấp Than Đá Chất Lượng, Giá Tốt | MIỀN NAM",
+      "summary": "Cung cấp đa dạng các loại than đá chất lượng với giá tốt nhất tại miền Nam.",
+      "content": "Than Đá Thái Bình cung cấp đa dạng các loại than đá bao gồm than cục, than cám, than Indonesia, than Úc và than Nam Phi. Tất cả đều được kiểm tra chất lượng nghiêm ngặt trước khi giao đến tay khách hàng.",
+      "image": "images/news/service-7.jpg"
+    },
+    {
+      "id": "cung-cap-than-dot-lo-hoi",
+      "title": "Cung cấp than đốt lò hơi uy tín, giá cạnh tranh toàn miền Nam",
+      "summary": "Đối tác uy tín trong cung cấp than đốt lò hơi cho các nhà máy công nghiệp miền Nam.",
+      "content": "Với hệ thống kho bãi rộng lớn và đội ngũ vận chuyển chuyên nghiệp, Than Đá Thái Bình cam kết cung cấp than đốt lò hơi đúng chất lượng, đúng số lượng và đúng thời gian cho mọi khách hàng.",
+      "image": "images/news/service-8.jpg"
+    },
+    {
+      "id": "cung-cap-than-indo-chat-luong",
+      "title": "Cung Cấp Than Indo Chất Lượng Cao, Giá Cạnh Tranh [MIỀN NAM]",
+      "summary": "Than Indonesia chất lượng cao, nhập khẩu chính ngạch, giá cạnh tranh tại miền Nam.",
+      "content": "Chúng tôi chuyên nhập khẩu than Indonesia chất lượng cao qua đường chính ngạch. Sản phẩm được kiểm định chất lượng bởi các tổ chức quốc tế, đảm bảo đạt tiêu chuẩn GAR cam kết.",
+      "image": "images/news/service-9.jpg"
+    },
+    {
+      "id": "cung-cap-than-quang-ninh-cong-nghiep",
+      "title": "Cung cấp than Quảng Ninh uy tín cho mọi nhu cầu công nghiệp",
+      "summary": "Đáp ứng mọi nhu cầu than Quảng Ninh cho công nghiệp với chất lượng và dịch vụ hàng đầu.",
+      "content": "Than Đá Thái Bình cung cấp than Quảng Ninh cho mọi nhu cầu công nghiệp: dệt nhuộm, giấy, xi măng, bê tông, sắt thép, thức ăn gia súc. Chúng tôi tư vấn loại than phù hợp nhất cho từng loại lò và quy mô sản xuất.",
+      "image": "images/news/service-10.jpg"
+    }
+  ],
+  "news": [
+    {
+      "id": "australia-nam-phi-the-cho-nga",
+      "title": "Australia và Nam Phi muốn \"thế chỗ\" Nga ở châu Âu",
+      "summary": "Các công ty khai thác ở Australia và Nam Phi đang tìm cách cung cấp than đá và kim loại cho người tiêu dùng ở châu Âu, thay thế cho nguồn cung của Nga.",
+      "content": "Các công ty khai thác ở Australia và Nam Phi đang tìm cách cung cấp than đá và kim loại cho người tiêu dùng ở châu Âu, thay thế cho nguồn cung của Nga. Đây là cơ hội lớn cho ngành khai thác than toàn cầu khi châu Âu tìm kiếm nguồn cung thay thế.",
+      "image": "images/news/news-1.jpg",
+      "date": "2024-03-15"
+    },
+    {
+      "id": "dong-gop-than-da-nang-luong",
+      "title": "Đóng góp của than đá trong cung cấp năng lượng",
+      "summary": "Than đá đóng một vai trò quan trọng trong việc cung cấp điện trên toàn cầu khi nó vẫn sẽ đóng góp tới 22% tổng sản lượng điện vào năm 2040.",
+      "content": "Than đá đóng một vai trò quan trọng trong việc cung cấp điện trên toàn cầu. Theo các dự báo, than đá vẫn sẽ đóng góp tới 22% tổng sản lượng điện vào năm 2040. Đặc biệt tại các quốc gia đang phát triển ở châu Á, than đá vẫn là nguồn năng lượng không thể thiếu.",
+      "image": "images/news/news-2.jpg",
+      "date": "2024-02-28"
+    },
+    {
+      "id": "sang-kien-nganh-than",
+      "title": "Sáng kiến có giá trị làm lợi \"khủng\" nhất ngành Than",
+      "summary": "Sáng kiến này có giá trị làm lợi \"khủng\" nhất ngành Than trong tổng số 4.032 sáng kiến đăng ký tham gia chương trình \"75.000 sáng kiến vượt khó\".",
+      "content": "Sáng kiến này có giá trị làm lợi lớn nhất ngành Than trong tổng số 4.032 sáng kiến đăng ký tham gia chương trình. Điều này cho thấy ngành than không ngừng đổi mới và cải tiến để nâng cao hiệu quả sản xuất.",
+      "image": "images/news/news-3.jpg",
+      "date": "2024-02-15"
+    },
+    {
+      "id": "vn-nhap-khau-than-virginia",
+      "title": "Việt Nam tăng cường nhập khẩu than đá từ bang Tây Virginia, Hoa Kỳ",
+      "summary": "Để đáp ứng nhu cầu sản xuất điện ngày một tăng cao, Việt Nam tăng cường nhập khẩu than đá từ nhiều nguồn quốc tế.",
+      "content": "Để đáp ứng nhu cầu sản xuất điện ngày một tăng cao cả trong giai đoạn trước mắt và dài hạn, bên cạnh việc chủ động gia tăng năng lực khai thác trong nước, Việt Nam đã tăng cường nhập khẩu than đá từ nhiều nguồn quốc tế, bao gồm cả bang Tây Virginia, Hoa Kỳ.",
+      "image": "images/news/news-4.jpg",
+      "date": "2024-01-20"
+    },
+    {
+      "id": "than-da-nong-tro-lai",
+      "title": "Than đá: Nguồn nhiên liệu đang \"nóng\" trở lại",
+      "summary": "Những người dự báo \"cái chết\" của than đá đang cảm thấy xấu hổ bởi loại nhiên liệu này đang trở thành mặt hàng nóng nhất trên thị trường.",
+      "content": "Những người từng dự báo về sự suy tàn của than đá đang phải xem xét lại quan điểm. Than đá đang trở thành mặt hàng có nhu cầu cao trên thị trường năng lượng toàn cầu, đặc biệt trong bối cảnh giá khí đốt tăng cao.",
+      "image": "images/news/news-5.jpg",
+      "date": "2024-01-10"
+    },
+    {
+      "id": "than-da-dong-nam-a",
+      "title": "Than đá tiếp tục là nguồn năng lượng chính tại Đông Nam Á",
+      "summary": "Than đá vẫn là nguồn cung cấp năng lượng chính tại một số quốc gia Đông Nam Á.",
+      "content": "Than đá vẫn là nguồn cung cấp năng lượng chính tại một số quốc gia Đông Nam Á. Ở thời điểm thế giới đang hướng tới năng lượng sạch, các nước trong khu vực vẫn phụ thuộc vào than đá do chi phí thấp và nguồn cung dồi dào.",
+      "image": "images/news/news-6.jpg",
+      "date": "2023-12-25"
+    },
+    {
+      "id": "vn-chuong-than-gia-re",
+      "title": "Việt Nam và Đông Nam Á vẫn chuộng than đá giá rẻ",
+      "summary": "Nhu cầu than đá giá rẻ với hiệu suất cháy thấp đang tăng tại Việt Nam và các nước châu Á mới nổi.",
+      "content": "Nhu cầu than đá giá rẻ với hiệu suất cháy thấp đang tăng tại Việt Nam và các nước châu Á mới nổi khác. Điều này đặt ra thách thức cho mục tiêu giảm phát thải carbon, nhưng cũng mở ra cơ hội cho các nhà cung cấp than đá.",
+      "image": "images/news/news-7.jpg",
+      "date": "2023-12-10"
+    }
+  ],
+  "contactIcons": {
+    "facebook": "",
+    "zalo": "",
+    "phone": ""
+  }
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Quản lý nội dung | Than Đá Thái Bình</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon"><i class="fas fa-fire"></i></div>
+        <span>Than Đá Thái Bình</span>
+        <span class="sidebar-badge">Admin</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav" id="admin-sidebar-nav">
+      <!-- Rendered by admin.js -->
+    </nav>
+    <div class="sidebar-footer" style="display:flex;flex-direction:column;gap:12px;">
+      <a href="index.html" class="back-link">
+        <i class="fas fa-external-link-alt"></i> Xem trang chính
+      </a>
+      <a href="#" onclick="Admin.openChangePasswordModal();return false;" class="back-link">
+        <i class="fas fa-key"></i> Đổi mật khẩu
+      </a>
+      <a href="#" onclick="Admin.handleLogout();return false;" class="back-link" style="color:var(--error);">
+        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+    <!-- Topbar -->
+    <div class="admin-topbar">
+      <div class="topbar-title" id="topbar-title">
+        <i class="fas fa-th-large"></i> Dashboard
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary" id="btn-push-github" onclick="Admin.pushToGitHub()" style="display:none;">
+          <i class="fab fa-github"></i> Đẩy lên GitHub
+        </button>
+        <button class="btn btn-success" onclick="Admin.exportJSON()">
+          <i class="fas fa-download"></i> Xuất JSON
+        </button>
+        <button class="btn btn-outline" onclick="location.reload()">
+          <i class="fas fa-sync-alt"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="admin-content" id="admin-content">
+      <!-- Rendered by admin.js -->
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div class="admin-modal-overlay" id="admin-modal-overlay">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3 id="modal-header-title">Modal</h3>
+        <button class="btn btn-sm btn-outline" onclick="Admin.closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="admin-modal-body" id="admin-modal-body">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="admin-modal-footer">
+        <button class="btn btn-outline" onclick="Admin.closeModal()">Hủy</button>
+        <button class="btn btn-primary" onclick="Admin.saveModal()">
+          <i class="fas fa-save"></i> Lưu
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/data-loader.js"></script>
+  <script src="js/github-api.js"></script>
+  <script src="js/admin.js"></script>
+  <script>
+    // Show/hide GitHub push button based on config
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const btn = document.getElementById('btn-push-github');
+        if (btn && typeof GitHubAPI !== 'undefined') {
+          btn.style.display = GitHubAPI.isConfigured() ? '' : 'none';
+        }
+      }, 500);
+    });
+  </script>
+</body>
+</html>
