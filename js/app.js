@@ -145,10 +145,11 @@ const App = (() => {
           }).join('')}
         </nav>
 
+        ${data.siteInfo.hotline ? `
         <a href="tel:${data.siteInfo.hotline}" class="header-hotline">
           <i class="fas fa-phone-alt"></i>
           ${data.siteInfo.hotline}
-        </a>
+        </a>` : ''}
 
         <button class="menu-toggle" id="menu-toggle" aria-label="Menu">
           <span></span><span></span><span></span>
@@ -170,10 +171,11 @@ const App = (() => {
         }
         return `<a href="#${item.id}" class="nav-link">${item.label}</a>`;
       }).join('')}
+      ${data.siteInfo.hotline ? `
       <a href="tel:${data.siteInfo.hotline}" class="header-hotline mobile-hotline" style="margin-top:24px;">
         <i class="fas fa-phone-alt"></i>
-        ${data.siteInfo.hotline} (${data.siteInfo.contactPerson})
-      </a>
+        ${data.siteInfo.hotline}${data.siteInfo.contactPerson ? ` (${data.siteInfo.contactPerson})` : ''}
+      </a>` : ''}
     </nav>`;
   }
 
@@ -210,7 +212,7 @@ const App = (() => {
           <a href="#san-pham" class="btn btn-primary btn-lg">
             <i class="fas fa-cubes"></i> Xem sản phẩm
           </a>
-          <a href="tel:${data.siteInfo.hotline}" class="btn btn-outline btn-lg">
+          <a href="${data.siteInfo.hotline ? `tel:${data.siteInfo.hotline}` : '#lien-he'}" class="btn btn-outline btn-lg">
             <i class="fas fa-phone-alt"></i> Liên hệ ngay
           </a>
         </div>
@@ -417,13 +419,13 @@ const App = (() => {
             <p>${about.experience}</p>
             <p>${about.products}</p>
             <p>${about.cta}</p>
-            <p>Hotline/Zalo: <a href="tel:${data.siteInfo.hotline}" style="color:var(--primary);font-weight:600;">${data.siteInfo.hotline}</a> (${data.siteInfo.contactPerson})</p>
+            ${data.siteInfo.hotline ? `<p>Hotline/Zalo: <a href="tel:${data.siteInfo.hotline}" style="color:var(--primary);font-weight:600;">${data.siteInfo.hotline}</a>${data.siteInfo.contactPerson ? ` (${data.siteInfo.contactPerson})` : ''}</p>` : (data.siteInfo.contactPerson ? `<p>Người liên hệ: ${data.siteInfo.contactPerson}</p>` : '')}
             <p><em>${about.closing}</em></p>
             <h3 style="margin-top:32px;margin-bottom:16px;color:var(--white);">Thông tin liên hệ</h3>
-            <p><strong>Trụ sở chính:</strong> ${data.siteInfo.address.office}</p>
-            <p><strong>Kho than:</strong> ${data.siteInfo.address.warehouse}</p>
-            <p><strong>Email:</strong> ${data.siteInfo.email}</p>
-            <p><strong>Website:</strong> <a href="http://${data.siteInfo.website}" style="color:var(--primary);">${data.siteInfo.website}</a></p>
+            ${data.siteInfo.address.office ? `<p><strong>Trụ sở chính:</strong> ${data.siteInfo.address.office}</p>` : ''}
+            ${data.siteInfo.address.warehouse ? `<p><strong>Kho than:</strong> ${data.siteInfo.address.warehouse}</p>` : ''}
+            ${data.siteInfo.email ? `<p><strong>Email:</strong> ${data.siteInfo.email}</p>` : ''}
+            ${data.siteInfo.website ? `<p><strong>Website:</strong> <a href="http://${data.siteInfo.website}" style="color:var(--primary);">${data.siteInfo.website}</a></p>` : ''}
           </div>
         </div>
       </div>
@@ -548,12 +550,16 @@ const App = (() => {
             </table>
             ` : ''}
             <div style="margin-top:32px;display:flex;gap:12px;flex-wrap:wrap;">
+              ${data.siteInfo.hotline ? `
               <a href="tel:${data.siteInfo.hotline}" class="btn btn-primary">
                 <i class="fas fa-phone-alt"></i> Gọi báo giá: ${data.siteInfo.hotline}
               </a>
               <a href="https://zalo.me/${data.siteInfo.hotline.replace(/\s/g, '')}" target="_blank" class="btn btn-outline">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="18" height="18" fill="currentColor" style="vertical-align:middle;"><path d="M24 4C12.95 4 4 12.07 4 22c0 5.52 2.63 10.43 6.74 13.77-.17 2.08-.93 5.14-2.74 7.23 0 0 5.17-.87 9.06-3.47A22.18 22.18 0 0 0 24 40c11.05 0 20-8.07 20-18S35.05 4 24 4z"/></svg> Nhắn Zalo
-              </a>
+              </a>` : `
+              <a href="#lien-he" class="btn btn-primary">
+                <i class="fas fa-envelope"></i> Liên hệ báo giá
+              </a>`}
             </div>
           </div>
         </div>
@@ -624,9 +630,13 @@ const App = (() => {
           <div class="article-content">
             <p>${service.content}</p>
             <div style="margin-top:32px;display:flex;gap:12px;flex-wrap:wrap;">
+              ${data.siteInfo.hotline ? `
               <a href="tel:${data.siteInfo.hotline}" class="btn btn-primary">
                 <i class="fas fa-phone-alt"></i> Liên hệ: ${data.siteInfo.hotline}
-              </a>
+              </a>` : `
+              <a href="#lien-he" class="btn btn-primary">
+                <i class="fas fa-envelope"></i> Liên hệ ngay
+              </a>`}
             </div>
           </div>
         </div>
@@ -733,48 +743,61 @@ const App = (() => {
         </div>
         <div class="contact-grid">
           <div class="contact-info-list">
+            ${info.address.office ? `
             <div class="contact-info-item">
               <div class="contact-info-icon"><i class="fas fa-map-marker-alt"></i></div>
               <div>
                 <h4>Trụ sở chính</h4>
                 <p>${info.address.office}</p>
               </div>
-            </div>
+            </div>` : ''}
+            ${info.address.warehouse ? `
             <div class="contact-info-item">
               <div class="contact-info-icon"><i class="fas fa-warehouse"></i></div>
               <div>
                 <h4>Kho than</h4>
                 <p>${info.address.warehouse}</p>
               </div>
-            </div>
+            </div>` : ''}
+            ${info.hotline ? `
             <div class="contact-info-item">
               <div class="contact-info-icon"><i class="fas fa-phone-alt"></i></div>
               <div>
                 <h4>Hotline/Zalo</h4>
-                <p><a href="tel:${info.hotline}">${info.hotline}</a> (${info.contactPerson})</p>
+                <p><a href="tel:${info.hotline}">${info.hotline}</a>${info.contactPerson ? ` (${info.contactPerson})` : ''}</p>
               </div>
-            </div>
+            </div>` : (info.contactPerson ? `
+            <div class="contact-info-item">
+              <div class="contact-info-icon"><i class="fas fa-user"></i></div>
+              <div>
+                <h4>Người liên hệ</h4>
+                <p>${info.contactPerson}</p>
+              </div>
+            </div>` : '')}
+            ${info.email ? `
             <div class="contact-info-item">
               <div class="contact-info-icon"><i class="fas fa-envelope"></i></div>
               <div>
                 <h4>Email</h4>
                 <p><a href="mailto:${info.email}">${info.email}</a></p>
               </div>
-            </div>
+            </div>` : ''}
+            ${info.website ? `
             <div class="contact-info-item">
               <div class="contact-info-icon"><i class="fas fa-globe"></i></div>
               <div>
                 <h4>Website</h4>
                 <p><a href="http://${info.website}" target="_blank">${info.website}</a></p>
               </div>
-            </div>
+            </div>` : ''}
+            ${info.facebook ? `
             <div class="contact-info-item">
               <div class="contact-info-icon"><i class="fab fa-facebook-f"></i></div>
               <div>
                 <h4>Facebook</h4>
                 <p><a href="${info.facebook}" target="_blank">Fanpage Facebook</a></p>
               </div>
-            </div>
+            </div>` : ''}
           </div>
 
           <div class="contact-form">
@@ -824,9 +847,10 @@ const App = (() => {
             </a>
             <p>${info.description}</p>
             <div class="footer-social">
-              <a href="${info.facebook}" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+              ${info.facebook ? `<a href="${info.facebook}" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>` : ''}
+              ${info.hotline ? `
               <a href="https://zalo.me/${info.hotline.replace(/\s/g, '')}" target="_blank" aria-label="Zalo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="16" height="16" fill="currentColor"><path d="M24 4C12.95 4 4 12.07 4 22c0 5.52 2.63 10.43 6.74 13.77-.17 2.08-.93 5.14-2.74 7.23 0 0 5.17-.87 9.06-3.47A22.18 22.18 0 0 0 24 40c11.05 0 20-8.07 20-18S35.05 4 24 4z"/></svg></a>
-              <a href="tel:${info.hotline}" aria-label="Phone"><i class="fas fa-phone-alt"></i></a>
+              <a href="tel:${info.hotline}" aria-label="Phone"><i class="fas fa-phone-alt"></i></a>` : ''}
             </div>
           </div>
 
@@ -853,10 +877,10 @@ const App = (() => {
 
           <div class="footer-column">
             <h4>Liên hệ</h4>
-            <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i> ${info.address.office}</div>
-            <div class="footer-contact-item"><i class="fas fa-warehouse"></i> ${info.address.warehouse}</div>
-            <div class="footer-contact-item"><i class="fas fa-phone-alt"></i> ${info.hotline} (${info.contactPerson})</div>
-            <div class="footer-contact-item"><i class="fas fa-envelope"></i> ${info.email}</div>
+            ${info.address.office ? `<div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i> ${info.address.office}</div>` : ''}
+            ${info.address.warehouse ? `<div class="footer-contact-item"><i class="fas fa-warehouse"></i> ${info.address.warehouse}</div>` : ''}
+            ${info.hotline ? `<div class="footer-contact-item"><i class="fas fa-phone-alt"></i> ${info.hotline}${info.contactPerson ? ` (${info.contactPerson})` : ''}</div>` : ''}
+            ${info.email ? `<div class="footer-contact-item"><i class="fas fa-envelope"></i> ${info.email}</div>` : ''}
           </div>
         </div>
 
@@ -893,15 +917,17 @@ const App = (() => {
 
     return `
     <div class="floating-phone">
+      ${info.facebook ? `
       <a href="${info.facebook}" target="_blank" class="floating-btn floating-fb-btn" title="Facebook">
         ${fbIcon}
-      </a>
+      </a>` : ''}
+      ${info.hotline ? `
       <a href="https://zalo.me/${info.hotline.replace(/\s/g, '')}" target="_blank" class="floating-btn floating-zalo-btn" title="Zalo">
         ${zaloIcon}
       </a>
       <a href="tel:${info.hotline}" class="floating-btn floating-phone-btn" title="Gọi ngay">
         ${phoneIcon}
-      </a>
+      </a>` : ''}
     </div>
     <button class="back-to-top" id="back-to-top" title="Lên đầu trang">
       <i class="fas fa-chevron-up"></i>
@@ -1077,12 +1103,16 @@ const App = (() => {
         ${Object.entries(product.specs).map(([key, val]) => `<tr><td>${specLabels[key] || key}</td><td>${val}</td></tr>`).join('')}
       </table>` : ''}
     `;
-    document.getElementById('modal-cta').innerHTML = `
+    document.getElementById('modal-cta').innerHTML = data.siteInfo.hotline ? `
       <a href="tel:${data.siteInfo.hotline}" class="btn btn-primary">
         <i class="fas fa-phone-alt"></i> Gọi: ${data.siteInfo.hotline}
       </a>
       <a href="https://zalo.me/${data.siteInfo.hotline.replace(/\s/g, '')}" target="_blank" class="btn btn-outline">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="18" height="18" fill="currentColor" style="vertical-align:middle;"><path d="M24 4C12.95 4 4 12.07 4 22c0 5.52 2.63 10.43 6.74 13.77-.17 2.08-.93 5.14-2.74 7.23 0 0 5.17-.87 9.06-3.47A22.18 22.18 0 0 0 24 40c11.05 0 20-8.07 20-18S35.05 4 24 4z"/></svg> Zalo
+      </a>
+    ` : `
+      <a href="#lien-he" class="btn btn-primary" onclick="App.closeModal()">
+        <i class="fas fa-envelope"></i> Liên hệ báo giá
       </a>
     `;
 

@@ -7,6 +7,9 @@ const Admin = (() => {
   let currentSection = 'dashboard';
   let editingItem = null;
   let editingType = null;
+  let selectedProductImageFile = null;
+  let selectedCategoryImageFile = null;
+  let selectedArticleImageFile = null;
 
   // ============================================
   // INITIALIZATION
@@ -616,9 +619,14 @@ const Admin = (() => {
       <div class="admin-card">
         <div class="admin-card-header">
           <div class="admin-card-title"><i class="fas fa-cubes"></i> Tất cả sản phẩm (${allProducts.length})</div>
-          <button class="btn btn-primary" onclick="Admin.openProductModal()">
-            <i class="fas fa-plus"></i> Thêm sản phẩm
-          </button>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-outline" onclick="Admin.openCategoryModal()">
+              <i class="fas fa-folder-plus"></i> Thêm danh mục
+            </button>
+            <button class="btn btn-primary" onclick="Admin.openProductModal()">
+              <i class="fas fa-plus"></i> Thêm sản phẩm
+            </button>
+          </div>
         </div>
         <table class="admin-table">
           <thead>
@@ -657,6 +665,8 @@ const Admin = (() => {
   }
 
   function renderCategoryProducts(category) {
+    selectedCategoryImageFile = null;
+
     return `
       <div class="admin-card">
         <div class="admin-card-header">
@@ -673,15 +683,30 @@ const Admin = (() => {
           </div>
           <div class="form-group" style="margin:0;">
             <label class="form-label">Ảnh danh mục</label>
-            <input class="form-input" id="cat-image" value="${escHtml(category.image || '')}">
+            <div class="image-upload-wrapper" style="padding: 4px 10px; min-height: 38px; display: flex; align-items: center;">
+              <div class="image-upload-preview" id="cat-image-preview" style="width: 40px; height: 30px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                ${category.image ? `<img src="${escHtml(category.image)}" style="width:100%;height:100%;object-fit:cover;">` : '<i class="fas fa-image" style="font-size:1rem;color:var(--text-muted);"></i>'}
+              </div>
+              <div class="image-upload-actions" style="flex:1; display:flex; flex-direction:row; align-items:center; gap:8px; margin-left:8px;">
+                <input type="file" id="cat-image-file" accept="image/*" style="display:none;" onchange="Admin.handleCategoryImageChange(this)">
+                <button class="btn btn-outline btn-sm" type="button" onclick="document.getElementById('cat-image-file').click()" style="padding: 4px 8px; font-size: 0.75rem; white-space:nowrap;">
+                  <i class="fas fa-upload"></i> Chọn file
+                </button>
+                <input type="hidden" id="cat-image" value="${escHtml(category.image || '')}">
+                <span class="image-upload-hint" id="cat-image-name" style="font-size:0.75rem; color:var(--text-muted); flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${category.image ? escHtml(category.image) : 'Chưa chọn ảnh'}</span>
+              </div>
+            </div>
           </div>
           <div class="form-group form-grid-full" style="margin:0;">
             <label class="form-label">Mô tả</label>
             <input class="form-input" id="cat-desc" value="${escHtml(category.description || '')}">
           </div>
-          <div style="grid-column:1/-1;">
+          <div style="grid-column:1/-1; display:flex; gap:8px;">
             <button class="btn btn-primary btn-sm" onclick="Admin.saveCategory('${category.id}')">
               <i class="fas fa-save"></i> Lưu danh mục
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="Admin.deleteCategory('${category.id}')">
+              <i class="fas fa-trash-alt"></i> Xóa danh mục
             </button>
           </div>
         </div>
@@ -717,20 +742,162 @@ const Admin = (() => {
     `;
   }
 
-  function saveCategory(catId) {
+  async function saveCategory(catId) {
     const cat = data.productCategories.find(c => c.id === catId);
     if (!cat) return;
-    cat.name = getVal('cat-name');
-    cat.image = getVal('cat-image');
-    cat.description = getVal('cat-desc');
+
+    const saveBtn = document.querySelector('.admin-card button[onclick^="Admin.saveCategory"]');
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang lưu...';
+    }
+
+    try {
+      const name = getVal('cat-name');
+      if (!name) { showToast('Vui lòng nhập tên danh mục!', 'error'); return; }
+
+      let imagePath = getVal('cat-image');
+
+      if (selectedCategoryImageFile) {
+        const ext = selectedCategoryImageFile.name.split('.').pop();
+        const filename = slugify(name) + '.' + ext;
+        const destPath = 'images/products/' + filename;
+
+        if (GitHubAPI.isConfigured()) {
+          showToast('Đang upload ảnh danh mục lên GitHub...', 'info');
+          try {
+            await GitHubAPI.uploadImage(selectedCategoryImageFile, destPath);
+            imagePath = destPath;
+            showToast('Đã upload ảnh thành công!', 'success');
+          } catch (err) {
+            showToast('Lỗi upload ảnh lên GitHub: ' + err.message, 'error');
+            imagePath = await readFileAsDataURL(selectedCategoryImageFile);
+          }
+        } else {
+          imagePath = await readFileAsDataURL(selectedCategoryImageFile);
+          showToast('Lưu ảnh dạng Base64 (Chưa kết nối GitHub)', 'warning');
+        }
+      }
+
+      cat.name = name;
+      cat.image = imagePath;
+      cat.description = getVal('cat-desc');
+
+      syncNavigationCategories();
+      persistData();
+      showToast('Đã lưu danh mục!', 'success');
+      renderSidebar();
+      renderContent();
+    } catch (err) {
+      console.error(err);
+      showToast('Lỗi lưu danh mục: ' + err.message, 'error');
+    } finally {
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Lưu danh mục';
+      }
+    }
+  }
+
+  function deleteCategory(catId) {
+    const cat = data.productCategories.find(c => c.id === catId);
+    if (!cat) return;
+
+    let confirmMsg = `Bạn có chắc muốn xóa danh mục "${cat.name}"?`;
+    if (cat.products.length > 0) {
+      confirmMsg = `CẢNH BÁO: Danh mục "${cat.name}" đang chứa ${cat.products.length} sản phẩm. Xóa danh mục sẽ xóa toàn bộ sản phẩm bên trong. Bạn có chắc chắn muốn xóa?`;
+    }
+
+    if (!confirm(confirmMsg)) return;
+
+    data.productCategories = data.productCategories.filter(c => c.id !== catId);
+    syncNavigationCategories();
     persistData();
-    showToast('Đã lưu danh mục!', 'success');
+    showToast('Đã xóa danh mục!', 'success');
+    currentSection = 'products'; // Redirect to all products page
     renderSidebar();
+    renderContent();
+  }
+
+  function openCategoryModal() {
+    editingItem = null;
+    editingType = 'category-new';
+    selectedCategoryImageFile = null;
+
+    showModal('Thêm danh mục mới', `
+      <div class="form-group">
+        <label class="form-label">Tên danh mục *</label>
+        <input class="form-input" id="modal-cat-name" placeholder="VD: Than đá nhập khẩu">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ảnh danh mục</label>
+        <div class="image-upload-wrapper">
+          <div class="image-upload-preview" id="cat-image-preview">
+            <i class="fas fa-image"></i>
+          </div>
+          <div class="image-upload-actions">
+            <input type="file" id="cat-image-file" accept="image/*" style="display:none;" onchange="Admin.handleCategoryImageChange(this)">
+            <button class="btn btn-outline btn-sm" type="button" onclick="document.getElementById('cat-image-file').click()">
+              <i class="fas fa-upload"></i> Chọn file ảnh
+            </button>
+            <input type="hidden" id="modal-cat-image" value="">
+            <span class="image-upload-hint" id="cat-image-name">Chưa chọn ảnh</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mô tả</label>
+        <input class="form-input" id="modal-cat-desc" placeholder="Mô tả ngắn về danh mục...">
+      </div>
+    `);
+  }
+
+  async function saveCategoryNew() {
+    const name = getVal('modal-cat-name');
+    if (!name) { showToast('Vui lòng nhập tên danh mục!', 'error'); return; }
+
+    const id = slugify(name);
+    if (data.productCategories.some(c => c.id === id)) {
+      showToast('Danh mục này đã tồn tại!', 'error');
+      return;
+    }
+
+    let imagePath = '';
+    if (selectedCategoryImageFile) {
+      const ext = selectedCategoryImageFile.name.split('.').pop();
+      const filename = id + '.' + ext;
+      const destPath = 'images/products/' + filename;
+
+      if (GitHubAPI.isConfigured()) {
+        try {
+          await GitHubAPI.uploadImage(selectedCategoryImageFile, destPath);
+          imagePath = destPath;
+        } catch (err) {
+          showToast('Lỗi upload ảnh lên GitHub: ' + err.message, 'error');
+          imagePath = await readFileAsDataURL(selectedCategoryImageFile);
+        }
+      } else {
+        imagePath = await readFileAsDataURL(selectedCategoryImageFile);
+      }
+    }
+
+    const newCat = {
+      id: id,
+      name: name,
+      description: getVal('modal-cat-desc') || '',
+      image: imagePath || 'images/products/default-category.jpg',
+      products: []
+    };
+
+    data.productCategories.push(newCat);
+    syncNavigationCategories();
+    showToast('Đã thêm danh mục mới!', 'success');
   }
 
   function openProductModal(defaultCatId) {
     editingItem = null;
     editingType = 'product';
+    selectedProductImageFile = null;
 
     const categoryOptions = data.productCategories.map(cat =>
       `<option value="${cat.id}" ${cat.id === defaultCatId ? 'selected' : ''}>${cat.name}</option>`
@@ -750,8 +917,20 @@ const Admin = (() => {
         <textarea class="form-textarea" id="modal-desc" rows="3" placeholder="Mô tả sản phẩm..."></textarea>
       </div>
       <div class="form-group">
-        <label class="form-label">Ảnh (đường dẫn)</label>
-        <input class="form-input" id="modal-image" placeholder="images/products/ten-san-pham.jpg">
+        <label class="form-label">Ảnh sản phẩm</label>
+        <div class="image-upload-wrapper">
+          <div class="image-upload-preview" id="product-image-preview">
+            <i class="fas fa-image"></i>
+          </div>
+          <div class="image-upload-actions">
+            <input type="file" id="product-image-file" accept="image/*" style="display:none;" onchange="Admin.handleProductImageChange(this)">
+            <button class="btn btn-outline btn-sm" type="button" onclick="document.getElementById('product-image-file').click()">
+              <i class="fas fa-upload"></i> Chọn file ảnh
+            </button>
+            <input type="hidden" id="modal-image" value="">
+            <span class="image-upload-hint" id="product-image-name">Chưa chọn ảnh</span>
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Thông số (JSON)</label>
@@ -772,10 +951,14 @@ const Admin = (() => {
 
     editingItem = product;
     editingType = 'product';
+    selectedProductImageFile = null;
 
     const categoryOptions = data.productCategories.map(cat =>
       `<option value="${cat.id}" ${cat.id === catId ? 'selected' : ''}>${cat.name}</option>`
     ).join('');
+
+    const hasImage = !!product.image;
+    const previewContent = hasImage ? `<img src="${escHtml(product.image)}" style="width:100%;height:100%;object-fit:cover;">` : `<i class="fas fa-image"></i>`;
 
     showModal('Sửa sản phẩm', `
       <div class="form-group">
@@ -791,8 +974,20 @@ const Admin = (() => {
         <textarea class="form-textarea" id="modal-desc" rows="3">${escHtml(product.description || '')}</textarea>
       </div>
       <div class="form-group">
-        <label class="form-label">Ảnh (đường dẫn)</label>
-        <input class="form-input" id="modal-image" value="${escHtml(product.image || '')}">
+        <label class="form-label">Ảnh sản phẩm</label>
+        <div class="image-upload-wrapper">
+          <div class="image-upload-preview" id="product-image-preview">
+            ${previewContent}
+          </div>
+          <div class="image-upload-actions">
+            <input type="file" id="product-image-file" accept="image/*" style="display:none;" onchange="Admin.handleProductImageChange(this)">
+            <button class="btn btn-outline btn-sm" type="button" onclick="document.getElementById('product-image-file').click()">
+              <i class="fas fa-upload"></i> Chọn file ảnh
+            </button>
+            <input type="hidden" id="modal-image" value="${escHtml(product.image || '')}">
+            <span class="image-upload-hint" id="product-image-name">${product.image ? escHtml(product.image) : 'Chưa chọn ảnh'}</span>
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Thông số (JSON)</label>
@@ -956,6 +1151,10 @@ const Admin = (() => {
   // SHARED ARTICLE FORM
   // ============================================
   function renderArticleForm(item, showDate) {
+    selectedArticleImageFile = null;
+    const hasImage = !!item?.image;
+    const previewContent = hasImage ? `<img src="${escHtml(item.image)}" style="width:100%;height:100%;object-fit:cover;">` : `<i class="fas fa-image"></i>`;
+
     return `
       <div class="form-group">
         <label class="form-label">Tiêu đề *</label>
@@ -975,8 +1174,20 @@ const Admin = (() => {
         <textarea class="form-textarea" id="modal-content" rows="5">${escHtml(item?.content || '')}</textarea>
       </div>
       <div class="form-group">
-        <label class="form-label">Ảnh (đường dẫn)</label>
-        <input class="form-input" id="modal-image" value="${escHtml(item?.image || '')}">
+        <label class="form-label">Ảnh bài viết</label>
+        <div class="image-upload-wrapper">
+          <div class="image-upload-preview" id="article-image-preview">
+            ${previewContent}
+          </div>
+          <div class="image-upload-actions">
+            <input type="file" id="article-image-file" accept="image/*" style="display:none;" onchange="Admin.handleArticleImageChange(this)">
+            <button class="btn btn-outline btn-sm" type="button" onclick="document.getElementById('article-image-file').click()">
+              <i class="fas fa-upload"></i> Chọn file ảnh
+            </button>
+            <input type="hidden" id="modal-image" value="${escHtml(item?.image || '')}">
+            <span class="image-upload-hint" id="article-image-name">${item?.image ? escHtml(item.image) : 'Chưa chọn ảnh'}</span>
+          </div>
+        </div>
       </div>
     `;
   }
@@ -996,24 +1207,42 @@ const Admin = (() => {
     editingType = null;
   }
 
-  function saveModal() {
-    if (editingType === 'product') {
-      saveProduct();
-    } else if (editingType === 'service') {
-      saveArticle(data.services, 'service');
-    } else if (editingType === 'news') {
-      saveArticle(data.news, 'news');
-    } else if (editingType === 'change-password') {
-      savePasswordFromModal();
-      return;
+  async function saveModal() {
+    const saveBtn = document.querySelector('.admin-modal-footer .btn-primary');
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang lưu...';
     }
-    persistData();
-    closeModal();
-    renderSidebar();
-    renderContent();
+
+    try {
+      if (editingType === 'product') {
+        await saveProduct();
+      } else if (editingType === 'service') {
+        await saveArticle(data.services, 'service');
+      } else if (editingType === 'news') {
+        await saveArticle(data.news, 'news');
+      } else if (editingType === 'change-password') {
+        savePasswordFromModal();
+        return;
+      } else if (editingType === 'category-new') {
+        await saveCategoryNew();
+      }
+      persistData();
+      closeModal();
+      renderSidebar();
+      renderContent();
+    } catch (err) {
+      console.error('Error saving modal:', err);
+      showToast('Lỗi lưu dữ liệu: ' + err.message, 'error');
+    } finally {
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Lưu';
+      }
+    }
   }
 
-  function saveProduct() {
+  async function saveProduct() {
     const name = getVal('modal-name');
     if (!name) { showToast('Vui lòng nhập tên sản phẩm!', 'error'); return; }
 
@@ -1030,6 +1259,29 @@ const Admin = (() => {
       return;
     }
 
+    let imagePath = getVal('modal-image');
+
+    if (selectedProductImageFile) {
+      const ext = selectedProductImageFile.name.split('.').pop();
+      const filename = slugify(name) + '.' + ext;
+      const destPath = 'images/products/' + filename;
+
+      if (GitHubAPI.isConfigured()) {
+        showToast('Đang upload ảnh lên GitHub...', 'info');
+        try {
+          await GitHubAPI.uploadImage(selectedProductImageFile, destPath);
+          imagePath = destPath;
+          showToast('Đã upload ảnh thành công!', 'success');
+        } catch (err) {
+          showToast('Lỗi upload ảnh lên GitHub: ' + err.message, 'error');
+          imagePath = await readFileAsDataURL(selectedProductImageFile);
+        }
+      } else {
+        imagePath = await readFileAsDataURL(selectedProductImageFile);
+        showToast('Lưu ảnh dạng Base64 (Chưa kết nối GitHub)', 'warning');
+      }
+    }
+
     if (editingItem) {
       // Remove from old category if changed
       for (const cat of data.productCategories) {
@@ -1040,7 +1292,7 @@ const Admin = (() => {
       editingItem.name = name;
       editingItem.category = catId;
       editingItem.description = getVal('modal-desc');
-      editingItem.image = getVal('modal-image');
+      editingItem.image = imagePath;
       editingItem.specs = specs;
       category.products.push(editingItem);
       showToast('Đã cập nhật sản phẩm!', 'success');
@@ -1051,22 +1303,45 @@ const Admin = (() => {
         name,
         category: catId,
         description: getVal('modal-desc'),
-        image: getVal('modal-image') || category.image,
+        image: imagePath || category.image,
         specs
       });
       showToast('Đã thêm sản phẩm mới!', 'success');
     }
   }
 
-  function saveArticle(collection, type) {
+  async function saveArticle(collection, type) {
     const title = getVal('modal-title');
     if (!title) { showToast('Vui lòng nhập tiêu đề!', 'error'); return; }
+
+    let imagePath = getVal('modal-image');
+
+    if (selectedArticleImageFile) {
+      const ext = selectedArticleImageFile.name.split('.').pop();
+      const filename = slugify(title) + '.' + ext;
+      const destPath = 'images/news/' + filename;
+
+      if (GitHubAPI.isConfigured()) {
+        showToast('Đang upload ảnh lên GitHub...', 'info');
+        try {
+          await GitHubAPI.uploadImage(selectedArticleImageFile, destPath);
+          imagePath = destPath;
+          showToast('Đã upload ảnh thành công!', 'success');
+        } catch (err) {
+          showToast('Lỗi upload ảnh lên GitHub: ' + err.message, 'error');
+          imagePath = await readFileAsDataURL(selectedArticleImageFile);
+        }
+      } else {
+        imagePath = await readFileAsDataURL(selectedArticleImageFile);
+        showToast('Lưu ảnh dạng Base64 (Chưa kết nối GitHub)', 'warning');
+      }
+    }
 
     const articleData = {
       title,
       summary: getVal('modal-summary'),
       content: getVal('modal-content'),
-      image: getVal('modal-image'),
+      image: imagePath,
     };
 
     const dateEl = document.getElementById('modal-date');
@@ -1348,6 +1623,67 @@ const Admin = (() => {
       .substring(0, 60);
   }
 
+  function readFileAsDataURL(file) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function syncNavigationCategories() {
+    if (!data || !data.navigation) return;
+    const productsNav = data.navigation.find(item => item.id === 'san-pham');
+    if (productsNav) {
+      productsNav.children = data.productCategories.map(cat => ({
+        id: cat.id,
+        label: cat.name
+      }));
+    }
+  }
+
+  function handleProductImageChange(input) {
+    const file = input.files[0];
+    if (!file) return;
+    selectedProductImageFile = file;
+    const nameEl = document.getElementById('product-image-name');
+    if (nameEl) nameEl.textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const previewEl = document.getElementById('product-image-preview');
+      if (previewEl) previewEl.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleCategoryImageChange(input) {
+    const file = input.files[0];
+    if (!file) return;
+    selectedCategoryImageFile = file;
+    const nameEl = document.getElementById('cat-image-name');
+    if (nameEl) nameEl.textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const previewEl = document.getElementById('cat-image-preview');
+      if (previewEl) previewEl.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleArticleImageChange(input) {
+    const file = input.files[0];
+    if (!file) return;
+    selectedArticleImageFile = file;
+    const nameEl = document.getElementById('article-image-name');
+    if (nameEl) nameEl.textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const previewEl = document.getElementById('article-image-preview');
+      if (previewEl) previewEl.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+    };
+    reader.readAsDataURL(file);
+  }
+
   function setupContentEvents() {
     // Any additional event wiring after content render
   }
@@ -1469,18 +1805,24 @@ const Admin = (() => {
           <div class="admin-card-title"><i class="fas fa-eye"></i> Xem trước</div>
         </div>
         <div style="display:grid;grid-template-columns:auto 1fr;gap:12px 16px;font-size:0.9rem;">
+          ${info.address.office ? `
           <div style="color:var(--text-muted);"><i class="fas fa-map-marker-alt" style="color:var(--primary);width:16px;"></i> Trụ sở:</div>
-          <div style="color:var(--text-primary);">${escHtml(info.address.office)}</div>
+          <div style="color:var(--text-primary);">${escHtml(info.address.office)}</div>` : ''}
+          ${info.address.warehouse ? `
           <div style="color:var(--text-muted);"><i class="fas fa-warehouse" style="color:var(--primary);width:16px;"></i> Kho:</div>
-          <div style="color:var(--text-primary);">${escHtml(info.address.warehouse)}</div>
+          <div style="color:var(--text-primary);">${escHtml(info.address.warehouse)}</div>` : ''}
+          ${info.hotline ? `
           <div style="color:var(--text-muted);"><i class="fas fa-phone-alt" style="color:var(--primary);width:16px;"></i> Hotline:</div>
-          <div style="color:var(--primary);font-weight:600;">${escHtml(info.hotline)} (${escHtml(info.contactPerson)})</div>
+          <div style="color:var(--primary);font-weight:600;">${escHtml(info.hotline)}${info.contactPerson ? ` (${escHtml(info.contactPerson)})` : ''}</div>` : ''}
+          ${info.email ? `
           <div style="color:var(--text-muted);"><i class="fas fa-envelope" style="color:var(--primary);width:16px;"></i> Email:</div>
-          <div style="color:var(--text-primary);">${escHtml(info.email)}</div>
+          <div style="color:var(--text-primary);">${escHtml(info.email)}</div>` : ''}
+          ${info.website ? `
           <div style="color:var(--text-muted);"><i class="fas fa-globe" style="color:var(--primary);width:16px;"></i> Web:</div>
-          <div style="color:var(--text-primary);">${escHtml(info.website)}</div>
+          <div style="color:var(--text-primary);">${escHtml(info.website)}</div>` : ''}
+          ${info.facebook ? `
           <div style="color:var(--text-muted);"><i class="fab fa-facebook" style="color:var(--primary);width:16px;"></i> FB:</div>
-          <div style="color:var(--text-primary);">${escHtml(info.facebook)}</div>
+          <div style="color:var(--text-primary);">${escHtml(info.facebook)}</div>` : ''}
         </div>
       </div>
     `;
@@ -1823,6 +2165,11 @@ const Admin = (() => {
     testGitHubConnection,
     closeModal,
     saveModal,
+    handleProductImageChange,
+    handleCategoryImageChange,
+    handleArticleImageChange,
+    openCategoryModal,
+    deleteCategory,
   };
 })();
 
