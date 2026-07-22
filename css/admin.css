@@ -662,8 +662,8 @@ ul { list-style: none; }
   .admin-table {
     font-size: 0.8rem;
   }
-  .admin-table th:nth-child(n+4),
-  .admin-table td:nth-child(n+4) {
+  .admin-table th:nth-child(3),
+  .admin-table td:nth-child(3) {
     display: none;
   }
 }

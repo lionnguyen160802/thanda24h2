@@ -690,28 +690,31 @@ const Admin = (() => {
         <table class="admin-table">
           <thead>
             <tr>
+              <th style="width:70px;">Ảnh</th>
               <th>Tên sản phẩm</th>
               <th>Danh mục</th>
-              <th>Ảnh</th>
-              <th style="width:120px;">Thao tác</th>
+              <th style="width:160px;">Thao tác</th>
             </tr>
           </thead>
           <tbody>
             ${allProducts.map(p => `
             <tr>
               <td>
+                ${p.image ? `<img src="${escHtml(p.image)}" alt="${escHtml(p.name)}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--admin-border);background:var(--admin-bg);" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                <div style="display:none;width:60px;height:45px;border-radius:6px;border:1px solid var(--admin-border);background:var(--admin-bg);align-items:center;justify-content:center;color:var(--text-muted);font-size:0.8rem;"><i class="fas fa-image"></i></div>` : `<div style="width:60px;height:45px;border-radius:6px;border:1px solid var(--admin-border);background:var(--admin-bg);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:0.8rem;"><i class="fas fa-image"></i></div>`}
+              </td>
+              <td>
                 <div class="item-name">${escHtml(p.name)}</div>
                 <div class="item-desc">${escHtml(p.description || '')}</div>
               </td>
               <td><span class="badge badge-category">${escHtml(p.categoryName)}</span></td>
-              <td style="color:var(--text-muted);font-size:0.8rem;">${escHtml(p.image || '')}</td>
               <td>
                 <div class="actions">
-                  <button class="btn btn-sm btn-outline" onclick="Admin.editProduct('${p.id}')">
-                    <i class="fas fa-edit"></i>
+                  <button class="btn btn-sm btn-outline" onclick="Admin.editProduct('${p.id}')" title="Sửa sản phẩm">
+                    <i class="fas fa-edit"></i> Sửa
                   </button>
-                  <button class="btn btn-sm btn-danger" onclick="Admin.deleteProduct('${p.id}')">
-                    <i class="fas fa-trash"></i>
+                  <button class="btn btn-sm btn-danger" onclick="Admin.deleteProduct('${p.id}')" title="Xóa sản phẩm">
+                    <i class="fas fa-trash"></i> Xóa
                   </button>
                 </div>
               </td>
