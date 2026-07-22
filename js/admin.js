@@ -10,6 +10,7 @@ const Admin = (() => {
   let selectedProductImageFile = null;
   let selectedCategoryImageFile = null;
   let selectedArticleImageFile = null;
+  let selectedAboutImageFile = null;
 
   // ============================================
   // INITIALIZATION
@@ -536,6 +537,9 @@ const Admin = (() => {
   // ============================================
   function renderAbout() {
     const about = data.aboutContent;
+    const aboutImage = about.image || 'images/about.jpg';
+    selectedAboutImageFile = null;
+
     return `
       <div class="admin-card">
         <div class="admin-card-header">
@@ -543,6 +547,23 @@ const Admin = (() => {
           <button class="btn btn-primary" onclick="Admin.saveAbout()">
             <i class="fas fa-save"></i> Lưu thay đổi
           </button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ảnh giới thiệu</label>
+          <div class="image-upload-wrapper">
+            <div class="image-upload-preview" id="about-image-preview">
+              <img src="${escHtml(aboutImage)}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-image\'></i>';">
+            </div>
+            <div class="image-upload-actions">
+              <input type="file" id="about-image-file" accept="image/*" style="display:none;" onchange="Admin.handleAboutImageChange(this)">
+              <button class="btn btn-outline btn-sm" type="button" onclick="document.getElementById('about-image-file').click()">
+                <i class="fas fa-upload"></i> Chọn file ảnh
+              </button>
+              <input type="hidden" id="about-image" value="${escHtml(aboutImage)}">
+              <span class="image-upload-hint" id="about-image-name">${escHtml(aboutImage)}</span>
+            </div>
+          </div>
+          <span class="form-hint">Ảnh hiển thị ở trang Giới thiệu. Khuyên dùng: 800×600px, JPG/PNG.</span>
         </div>
         <div class="form-group">
           <label class="form-label">Giới thiệu</label>
@@ -590,21 +611,59 @@ const Admin = (() => {
     `;
   }
 
-  function saveAbout() {
-    data.aboutContent.intro = getVal('about-intro');
-    data.aboutContent.experience = getVal('about-experience');
-    data.aboutContent.products = getVal('about-products');
-    data.aboutContent.cta = getVal('about-cta');
-    data.aboutContent.closing = getVal('about-closing');
+  async function saveAbout() {
+    const saveBtn = document.querySelector('.admin-card button[onclick="Admin.saveAbout()"]');
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang lưu...';
+    }
 
-    data.aboutContent.highlights.forEach((h, i) => {
-      h.icon = getVal(`hl-icon-${i}`);
-      h.title = getVal(`hl-title-${i}`);
-      h.description = getVal(`hl-desc-${i}`);
-    });
+    try {
+      let imagePath = getVal('about-image');
 
-    persistData();
-    showToast('Đã lưu nội dung giới thiệu!', 'success');
+      if (selectedAboutImageFile) {
+        // Always save base64 for immediate local preview
+        imagePath = await readFileAsDataURL(selectedAboutImageFile);
+
+        // Also upload to GitHub if configured (in background)
+        if (GitHubAPI.isConfigured()) {
+          const ext = selectedAboutImageFile.name.split('.').pop();
+          const filename = 'about.' + ext;
+          const destPath = 'images/' + filename;
+          try {
+            await GitHubAPI.uploadImage(selectedAboutImageFile, destPath);
+            showToast('Đã upload ảnh lên GitHub!', 'success');
+          } catch (err) {
+            showToast('Lỗi upload ảnh lên GitHub: ' + err.message, 'error');
+          }
+        }
+      }
+
+      data.aboutContent.image = imagePath;
+      data.aboutContent.intro = getVal('about-intro');
+      data.aboutContent.experience = getVal('about-experience');
+      data.aboutContent.products = getVal('about-products');
+      data.aboutContent.cta = getVal('about-cta');
+      data.aboutContent.closing = getVal('about-closing');
+
+      data.aboutContent.highlights.forEach((h, i) => {
+        h.icon = getVal(`hl-icon-${i}`);
+        h.title = getVal(`hl-title-${i}`);
+        h.description = getVal(`hl-desc-${i}`);
+      });
+
+      persistData();
+      showToast('Đã lưu nội dung giới thiệu!', 'success');
+      renderContent();
+    } catch (err) {
+      console.error(err);
+      showToast('Lỗi lưu: ' + err.message, 'error');
+    } finally {
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Lưu thay đổi';
+      }
+    }
   }
 
   // ============================================
@@ -669,7 +728,7 @@ const Admin = (() => {
 
     return `
       <div class="admin-card">
-        <div class="admin-card-header">
+        <div class="admin-card-header" style="flex-wrap:wrap;gap:12px;">
           <div class="admin-card-title"><i class="fas fa-cubes"></i> ${category.name} (${category.products.length})</div>
           <button class="btn btn-primary" onclick="Admin.openProductModal('${category.id}')">
             <i class="fas fa-plus"></i> Thêm sản phẩm
@@ -711,33 +770,35 @@ const Admin = (() => {
           </div>
         </div>
 
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Tên sản phẩm</th>
-              <th>Mô tả</th>
-              <th style="width:120px;">Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${category.products.map(p => `
-            <tr>
-              <td><div class="item-name">${escHtml(p.name)}</div></td>
-              <td style="color:var(--text-secondary);font-size:0.85rem;">${escHtml(p.description || '').substring(0, 80)}...</td>
-              <td>
-                <div class="actions">
-                  <button class="btn btn-sm btn-outline" onclick="Admin.editProduct('${p.id}')">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button class="btn btn-sm btn-danger" onclick="Admin.deleteProduct('${p.id}')">
-                    <i class="fas fa-trash"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            `).join('')}
-          </tbody>
-        </table>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div style="font-size:0.8rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Danh sách sản phẩm</div>
+          <button class="btn btn-primary btn-sm" onclick="Admin.openProductModal('${category.id}')">
+            <i class="fas fa-plus"></i> Thêm sản phẩm
+          </button>
+        </div>
+
+        ${category.products.length === 0 ? `
+          <div class="empty-state">
+            <i class="fas fa-box-open"></i>
+            <h3>Chưa có sản phẩm nào</h3>
+            <p>Nhấn "Thêm sản phẩm" để bắt đầu thêm sản phẩm vào danh mục này.</p>
+          </div>
+        ` : category.products.map(p => `
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--admin-border);transition:background 0.2s;" onmouseover="this.style.background='var(--admin-hover)'" onmouseout="this.style.background='transparent'">
+            <div style="flex:1;min-width:0;">
+              <div style="font-weight:600;color:var(--text-primary);font-size:0.9rem;">${escHtml(p.name)}</div>
+              <div style="color:var(--text-secondary);font-size:0.8rem;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(p.description || 'Chưa có mô tả')}</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-shrink:0;">
+              <button class="btn btn-sm btn-outline" onclick="Admin.editProduct('${p.id}')" title="Sửa sản phẩm">
+                <i class="fas fa-edit"></i> Sửa
+              </button>
+              <button class="btn btn-sm btn-danger" onclick="Admin.deleteProduct('${p.id}')" title="Xóa sản phẩm">
+                <i class="fas fa-trash"></i> Xóa
+              </button>
+            </div>
+          </div>
+        `).join('')}
       </div>
     `;
   }
@@ -759,23 +820,18 @@ const Admin = (() => {
       let imagePath = getVal('cat-image');
 
       if (selectedCategoryImageFile) {
-        const ext = selectedCategoryImageFile.name.split('.').pop();
-        const filename = slugify(name) + '.' + ext;
-        const destPath = 'images/products/' + filename;
+        imagePath = await readFileAsDataURL(selectedCategoryImageFile);
 
         if (GitHubAPI.isConfigured()) {
-          showToast('Đang upload ảnh danh mục lên GitHub...', 'info');
+          const ext = selectedCategoryImageFile.name.split('.').pop();
+          const filename = slugify(name) + '.' + ext;
+          const destPath = 'images/products/' + filename;
           try {
             await GitHubAPI.uploadImage(selectedCategoryImageFile, destPath);
-            imagePath = destPath;
-            showToast('Đã upload ảnh thành công!', 'success');
+            showToast('Đã upload ảnh lên GitHub!', 'success');
           } catch (err) {
             showToast('Lỗi upload ảnh lên GitHub: ' + err.message, 'error');
-            imagePath = await readFileAsDataURL(selectedCategoryImageFile);
           }
-        } else {
-          imagePath = await readFileAsDataURL(selectedCategoryImageFile);
-          showToast('Lưu ảnh dạng Base64 (Chưa kết nối GitHub)', 'warning');
         }
       }
 
@@ -864,20 +920,18 @@ const Admin = (() => {
 
     let imagePath = '';
     if (selectedCategoryImageFile) {
-      const ext = selectedCategoryImageFile.name.split('.').pop();
-      const filename = id + '.' + ext;
-      const destPath = 'images/products/' + filename;
+      imagePath = await readFileAsDataURL(selectedCategoryImageFile);
 
       if (GitHubAPI.isConfigured()) {
+        const ext = selectedCategoryImageFile.name.split('.').pop();
+        const filename = id + '.' + ext;
+        const destPath = 'images/products/' + filename;
         try {
           await GitHubAPI.uploadImage(selectedCategoryImageFile, destPath);
-          imagePath = destPath;
+          showToast('Đã upload ảnh lên GitHub!', 'success');
         } catch (err) {
           showToast('Lỗi upload ảnh lên GitHub: ' + err.message, 'error');
-          imagePath = await readFileAsDataURL(selectedCategoryImageFile);
         }
-      } else {
-        imagePath = await readFileAsDataURL(selectedCategoryImageFile);
       }
     }
 
@@ -1260,27 +1314,26 @@ const Admin = (() => {
     }
 
     let imagePath = getVal('modal-image');
+    console.log('[saveProduct] selectedProductImageFile:', selectedProductImageFile);
+    console.log('[saveProduct] initial imagePath:', imagePath);
 
     if (selectedProductImageFile) {
-      const ext = selectedProductImageFile.name.split('.').pop();
-      const filename = slugify(name) + '.' + ext;
-      const destPath = 'images/products/' + filename;
+      imagePath = await readFileAsDataURL(selectedProductImageFile);
+      console.log('[saveProduct] base64 imagePath length:', imagePath.length);
 
       if (GitHubAPI.isConfigured()) {
-        showToast('Đang upload ảnh lên GitHub...', 'info');
+        const ext = selectedProductImageFile.name.split('.').pop();
+        const filename = slugify(name) + '.' + ext;
+        const destPath = 'images/products/' + filename;
         try {
           await GitHubAPI.uploadImage(selectedProductImageFile, destPath);
-          imagePath = destPath;
-          showToast('Đã upload ảnh thành công!', 'success');
+          showToast('Đã upload ảnh lên GitHub!', 'success');
         } catch (err) {
           showToast('Lỗi upload ảnh lên GitHub: ' + err.message, 'error');
-          imagePath = await readFileAsDataURL(selectedProductImageFile);
         }
-      } else {
-        imagePath = await readFileAsDataURL(selectedProductImageFile);
-        showToast('Lưu ảnh dạng Base64 (Chưa kết nối GitHub)', 'warning');
       }
     }
+    console.log('[saveProduct] final imagePath:', imagePath ? imagePath.substring(0, 80) + '...' : 'EMPTY');
 
     if (editingItem) {
       // Remove from old category if changed
@@ -1317,23 +1370,18 @@ const Admin = (() => {
     let imagePath = getVal('modal-image');
 
     if (selectedArticleImageFile) {
-      const ext = selectedArticleImageFile.name.split('.').pop();
-      const filename = slugify(title) + '.' + ext;
-      const destPath = 'images/news/' + filename;
+      imagePath = await readFileAsDataURL(selectedArticleImageFile);
 
       if (GitHubAPI.isConfigured()) {
-        showToast('Đang upload ảnh lên GitHub...', 'info');
+        const ext = selectedArticleImageFile.name.split('.').pop();
+        const filename = slugify(title) + '.' + ext;
+        const destPath = 'images/news/' + filename;
         try {
           await GitHubAPI.uploadImage(selectedArticleImageFile, destPath);
-          imagePath = destPath;
-          showToast('Đã upload ảnh thành công!', 'success');
+          showToast('Đã upload ảnh lên GitHub!', 'success');
         } catch (err) {
           showToast('Lỗi upload ảnh lên GitHub: ' + err.message, 'error');
-          imagePath = await readFileAsDataURL(selectedArticleImageFile);
         }
-      } else {
-        imagePath = await readFileAsDataURL(selectedArticleImageFile);
-        showToast('Lưu ảnh dạng Base64 (Chưa kết nối GitHub)', 'warning');
       }
     }
 
@@ -1684,6 +1732,20 @@ const Admin = (() => {
     reader.readAsDataURL(file);
   }
 
+  function handleAboutImageChange(input) {
+    const file = input.files[0];
+    if (!file) return;
+    selectedAboutImageFile = file;
+    const nameEl = document.getElementById('about-image-name');
+    if (nameEl) nameEl.textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const previewEl = document.getElementById('about-image-preview');
+      if (previewEl) previewEl.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+    };
+    reader.readAsDataURL(file);
+  }
+
   function setupContentEvents() {
     // Any additional event wiring after content render
   }
@@ -1927,7 +1989,7 @@ const Admin = (() => {
       images.push({ path: data.heroSection.backgroundImage, label: 'Hero Banner', source: 'hero' });
     }
     // About (convention)
-    images.push({ path: 'images/about.jpg', label: 'Ảnh giới thiệu', source: 'about' });
+    images.push({ path: data.aboutContent.image || 'images/about.jpg', label: 'Ảnh giới thiệu', source: 'about' });
     // Product categories
     data.productCategories.forEach(cat => {
       if (cat.image) {
@@ -2168,6 +2230,7 @@ const Admin = (() => {
     handleProductImageChange,
     handleCategoryImageChange,
     handleArticleImageChange,
+    handleAboutImageChange,
     openCategoryModal,
     deleteCategory,
   };

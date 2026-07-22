@@ -270,7 +270,7 @@ const App = (() => {
             </div>
           </div>
           <div class="about-image reveal">
-            <img src="images/about.jpg" alt="Về Than Đá Thái Bình" onerror="this.parentElement.style.background='linear-gradient(135deg, #1E1E1E, #2A2A2A)';this.style.display='none'">
+            <img src="${data.aboutContent.image || 'images/about.jpg'}" alt="Về Than Đá Thái Bình" onerror="this.parentElement.style.background='linear-gradient(135deg, #1E1E1E, #2A2A2A)';this.style.display='none'">
           </div>
         </div>
       </div>
@@ -411,7 +411,7 @@ const App = (() => {
         <div class="article-detail">
           <h1>Giới thiệu ${data.siteInfo.companyName}</h1>
           <div class="article-image">
-            <img src="images/about.jpg" alt="Giới thiệu" onerror="this.parentElement.style.background='linear-gradient(135deg, #1E1E1E, #2A2A2A)';this.style.display='none'">
+            <img src="${data.aboutContent.image || 'images/about.jpg'}" alt="Giới thiệu" onerror="this.parentElement.style.background='linear-gradient(135deg, #1E1E1E, #2A2A2A)';this.style.display='none'">
           </div>
           <div class="article-content">
             <p><strong>"${data.siteInfo.slogan}"</strong></p>
